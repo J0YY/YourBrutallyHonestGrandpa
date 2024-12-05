@@ -1,101 +1,240 @@
-import Image from "next/image";
+'use client';
+
+import { useState, useEffect } from 'react';
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [userInput, setUserInput] = useState('');
+  const [response, setResponse] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [gradient, setGradient] = useState('');
+  const [showInfo, setShowInfo] = useState(false); // For the info modal
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  useEffect(() => {
+    // Generate two random light colors
+    const randomColor = () =>
+      `hsl(${Math.floor(Math.random() * 360)}, ${Math.floor(
+        Math.random() * 40 + 60
+      )}%, ${Math.floor(Math.random() * 30 + 70)}%)`;
+
+    const color1 = randomColor();
+    const color2 = randomColor();
+
+    setGradient(`linear-gradient(135deg, ${color1}, ${color2})`);
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!userInput) return;
+
+    setLoading(true);
+    try {
+      const res = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userInput }),
+      });
+
+      if (!res.ok) throw new Error('Failed to fetch response');
+
+      const data = await res.json();
+      setResponse(data.response);
+    } catch (error) {
+      console.error(error);
+      setResponse('Something went wrong. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        background: gradient,
+        padding: '20px',
+        fontFamily: 'Arial, sans-serif',
+        position: 'relative', // Allows the floating button to stay positioned
+        overflow: 'hidden',
+        transition: 'background 0.5s ease-in-out',
+      }}
+    >
+      {/* Floating Info Button */}
+      <div
+        onClick={() => setShowInfo(true)}
+        style={{
+          position: 'absolute',
+          top: '20px',
+          right: '20px',
+          width: '50px',
+          height: '50px',
+          backgroundColor: '#ffffff',
+          borderRadius: '50%',
+          boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          cursor: 'pointer',
+          animation: 'bounce 2s infinite',
+        }}
+        title="Click for info"
+      >
+        ℹ️
+      </div>
+
+      {/* Info Modal */}
+      {showInfo && (
+        <div
+          style={{
+            color: 'black',
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '90%',
+            maxWidth: '400px',
+            background: 'rgba(255, 255, 255, 0.9)',
+            padding: '20px',
+            borderRadius: '8px',
+            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
+            zIndex: 10,
+            textAlign: 'center',
+          }}
+        >
+          <h2 style={{ marginBottom: '10px' }}><b>Note from Creator</b></h2>
+          <p style={{ fontSize: '1rem', lineHeight: '1.5' }}>
+          We're living in an era of depression and burnout, where tasks just seem never-ending and, for many, motivation is at an all time low. Rise and Roast started as a joke of a project to roast myself into being productive rather than lazing around in bed. Humor keep things playful and avoids being mean, while also giving a little nudge in the right direction. Enjoy!
+          </p>
+          <p>-Joy</p>
+          <button
+            onClick={() => setShowInfo(false)}
+            style={{
+              marginTop: '20px',
+              padding: '10px 20px',
+              fontSize: '16px',
+              backgroundColor: '#ff6f61',
+              color: '#ffffff',
+              border: 'none',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              transition: 'background-color 0.3s ease',
+            }}
+            onMouseOver={(e) => (e.target.style.backgroundColor = '#ff886f')}
+            onMouseOut={(e) => (e.target.style.backgroundColor = '#ff6f61')}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            Close
+          </button>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+      )}
+
+      <h1
+        style={{
+          fontSize: '3rem',
+          fontWeight: 'bold',
+          color: 'white',
+          marginBottom: '20px',
+          textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+        }}
+      >
+        Rise and Roast
+      </h1>
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '10px',
+          width: '100%',
+          maxWidth: '400px',
+        }}
+      >
+        <input
+          type="text"
+          placeholder="What are you doing?"
+          value={userInput}
+          onChange={(e) => setUserInput(e.target.value)}
+          style={{
+            color: 'black',
+            width: '100%',
+            padding: '15px',
+            fontSize: '16px',
+            borderRadius: '8px',
+            border: '2px solid #ffffff',
+            backgroundColor: 'rgba(255, 255, 255, 0.8)',
+            outline: 'none',
+            transition: 'border-color 0.3s ease-in-out',
+          }}
+          onFocus={(e) => (e.target.style.borderColor = '#ff9a9e')}
+          onBlur={(e) => (e.target.style.borderColor = '#ffffff')}
+        />
+        <button
+          type="submit"
+          style={{
+            padding: '12px 25px',
+            fontSize: '18px',
+            fontWeight: 'bold',
+            color: '#ffffff',
+            backgroundColor: '#ff6f61',
+            border: 'none',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            transition: 'transform 0.2s ease-in-out, background-color 0.3s ease-in-out',
+          }}
+          onMouseOver={(e) => (e.target.style.backgroundColor = '#ff886f')}
+          onMouseOut={(e) => (e.target.style.backgroundColor = '#ff6f61')}
+          onMouseDown={(e) => (e.target.style.transform = 'scale(0.95)')}
+          onMouseUp={(e) => (e.target.style.transform = 'scale(1)')}
+          disabled={loading}
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          {loading ? 'Loading...' : 'Roast Me'}
+        </button>
+      </form>
+      {response && (
+        <div
+          style={{
+            marginTop: '20px',
+            padding: '20px',
+            background: 'rgba(255, 255, 255, 0.9)',
+            borderRadius: '8px',
+            boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
+            maxWidth: '400px',
+            textAlign: 'center',
+            animation: 'fadeIn 0.5s ease-in-out',
+          }}
         >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          <p style={{ fontSize: '1.2rem', color: '#333' }}>{response}</p>
+        </div>
+      )}
+      <style>
+        {`
+          @keyframes fadeIn {
+            from {
+              opacity: 0;
+              transform: translateY(10px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+
+          @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+              transform: translateY(0);
+            }
+            40% {
+              transform: translateY(-10px);
+            }
+            60% {
+              transform: translateY(-5px);
+            }
+          }
+        `}
+      </style>
     </div>
   );
 }
