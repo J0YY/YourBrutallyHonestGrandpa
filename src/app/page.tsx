@@ -104,29 +104,34 @@ export default function Home() {
             textAlign: 'center',
           }}
         >
-          <h2 style={{ marginBottom: '10px' }}><b>Note from Creator</b></h2>
+          <h2 style={{ marginBottom: '10px' }}><b>Note from the Creator</b></h2>
           <p style={{ fontSize: '1rem', lineHeight: '1.5' }}>
-          We're living in an era of depression and burnout, where tasks just seem never-ending and, for many, motivation is at an all time low. Rise and Roast started as a joke of a project to roast myself into being productive rather than lazing around in bed. Humor keep things playful and avoids being mean, while also giving a little nudge in the right direction. Enjoy!
+          We&apos;re living in an era of depression and burnout, where tasks just seem never-ending and, for many, motivation is at an all time low. Rise and Roast started as a joke of a project to roast myself into being productive rather than lazing around in bed. Humor keep things playful and avoids being mean, while also giving a little nudge in the right direction. Enjoy!
           </p>
           <p>-Joy</p>
           <button
-            onClick={() => setShowInfo(false)}
-            style={{
-              marginTop: '20px',
-              padding: '10px 20px',
-              fontSize: '16px',
-              backgroundColor: '#ff6f61',
-              color: '#ffffff',
-              border: 'none',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              transition: 'background-color 0.3s ease',
-            }}
-            onMouseOver={(e) => (e.target.style.backgroundColor = '#ff886f')}
-            onMouseOut={(e) => (e.target.style.backgroundColor = '#ff6f61')}
-          >
-            Close
-          </button>
+  onClick={() => setShowInfo(false)}
+  style={{
+    marginTop: '20px',
+    padding: '10px 20px',
+    fontSize: '16px',
+    backgroundColor: '#ff6f61',
+    color: '#ffffff',
+    border: 'none',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    transition: 'background-color 0.3s ease',
+  }}
+  onMouseOver={(e) =>
+    ((e.target as HTMLButtonElement).style.backgroundColor = '#ff886f')
+  }
+  onMouseOut={(e) =>
+    ((e.target as HTMLButtonElement).style.backgroundColor = '#ff6f61')
+  }
+>
+  Close
+</button>
+
         </div>
       )}
 
@@ -171,27 +176,36 @@ export default function Home() {
           onFocus={(e) => (e.target.style.borderColor = '#ff9a9e')}
           onBlur={(e) => (e.target.style.borderColor = '#ffffff')}
         />
-        <button
-          type="submit"
-          style={{
-            padding: '12px 25px',
-            fontSize: '18px',
-            fontWeight: 'bold',
-            color: '#ffffff',
-            backgroundColor: '#ff6f61',
-            border: 'none',
-            borderRadius: '8px',
-            cursor: 'pointer',
-            transition: 'transform 0.2s ease-in-out, background-color 0.3s ease-in-out',
-          }}
-          onMouseOver={(e) => (e.target.style.backgroundColor = '#ff886f')}
-          onMouseOut={(e) => (e.target.style.backgroundColor = '#ff6f61')}
-          onMouseDown={(e) => (e.target.style.transform = 'scale(0.95)')}
-          onMouseUp={(e) => (e.target.style.transform = 'scale(1)')}
-          disabled={loading}
-        >
-          {loading ? 'Loading...' : 'Roast Me'}
-        </button>
+            <button
+      type="submit"
+      style={{
+        padding: '12px 25px',
+        fontSize: '18px',
+        fontWeight: 'bold',
+        color: '#ffffff',
+        backgroundColor: '#ff6f61',
+        border: 'none',
+        borderRadius: '8px',
+        cursor: 'pointer',
+        transition: 'transform 0.2s ease-in-out, background-color 0.3s ease-in-out',
+      }}
+      onMouseOver={(e) =>
+        ((e.target as HTMLButtonElement).style.backgroundColor = '#ff886f')
+      }
+      onMouseOut={(e) =>
+        ((e.target as HTMLButtonElement).style.backgroundColor = '#ff6f61')
+      }
+      onMouseDown={(e) =>
+        ((e.target as HTMLButtonElement).style.transform = 'scale(0.95)')
+      }
+      onMouseUp={(e) =>
+        ((e.target as HTMLButtonElement).style.transform = 'scale(1)')
+      }
+      disabled={loading}
+    >
+      {loading ? 'Loading...' : 'Roast Me'}
+    </button>
+
       </form>
       {response && (
         <div
