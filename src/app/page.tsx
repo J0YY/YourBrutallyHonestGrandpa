@@ -463,7 +463,7 @@ export default function Home() {
     </ul>
   </div>
 
-          {/* Centered Image */}
+          {/* Example Image */}
     <img 
       src="/exampleRoast.jpg" 
       alt="Grandpa" 
