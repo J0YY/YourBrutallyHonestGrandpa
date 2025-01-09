@@ -17,10 +17,10 @@ export async function POST(req) {
       messages: [
         {
           role: 'user',
-          content: `Here's what I'm doing: "${userInput}". Roast me based on what I'm doing in a funny, witty, clever, and/or sarcastic way. Be absolutely ruthless and funny above all, be really mean, and keep it short and witty. Also keep your response gender neutral.`,
+          content: `Respond. "${userInput}".`,
         },
       ],
-      max_tokens: 100,
+      max_tokens: 250,
     });
 
     const generatedText = response.choices[0].message.content.trim();

@@ -14,7 +14,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Rise and Roast",
+  title: "Your Brutally Honest Grandpa",
   description: "by Joy",
 };
 
